@@ -1,6 +1,11 @@
 import numpy as np
+import os 
 
-with open('./aoc2022/day9/input.txt', 'r') as file:
+print(os.getcwd())
+
+with open('input.txt', 'r') as file:
     inputs = [x.strip() for x in file]
 
 print(inputs)
+
+# L U D R
