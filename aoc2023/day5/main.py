@@ -4,7 +4,7 @@ import numpy as np
 from tqdm import tqdm
 print(os.getcwd())
 
-with open('./day5/input.txt','r') as file:
+with open('./day5/example.txt','r') as file:
     input = file.read()
 
 pattern = r'\n\n'
@@ -74,7 +74,6 @@ def range_transform(a,b,n,o,r):
             return [[n, b+n-o], [a, o-1]]
 
 ranges = part2seeds.copy()
-ranges = ranges[1:]
 t_keys = list(categories.keys())[1:]
 new_ranges = []
 for id, seed_rng in enumerate(ranges):

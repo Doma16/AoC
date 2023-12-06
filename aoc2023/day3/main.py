@@ -9,6 +9,7 @@ with open('./day3/input.txt','r') as file:
 
 parts = dict()
 gear_ratios = []
+pattern = r'\.+'
 for hgt, (before, check, after) in enumerate(zip(inputs[0:-2], inputs[1:-1], inputs[2:])):
         
     for i, letter in enumerate(check):
@@ -24,7 +25,6 @@ for hgt, (before, check, after) in enumerate(zip(inputs[0:-2], inputs[1:-1], inp
                         alt = check[:j] + 'A'
                     else:
                         alt = 'A' + check[j+1:] 
-                    pattern = r'\.+'
                     splitted = re.split(pattern, alt)
                     number = [x for x in splitted if x.find('A') != -1][0]
                     number = ''.join([x for x in number if x.isalnum()])
@@ -36,7 +36,6 @@ for hgt, (before, check, after) in enumerate(zip(inputs[0:-2], inputs[1:-1], inp
                 if before[j].isalnum():
                     num = before[j]
                     alt = before[:j] + 'A' + before[j+1:]
-                    pattern = r'\.+'
                     splitted = re.split(pattern, alt)
                     number = [x for x in splitted if x.find('A') != -1][0]
                     number = ''.join([x for x in number if x.isalnum()])
@@ -48,7 +47,6 @@ for hgt, (before, check, after) in enumerate(zip(inputs[0:-2], inputs[1:-1], inp
                 if after[j].isalnum():
                     num = after[j]
                     alt = after[:j] + 'A' + after[j+1:]
-                    pattern = r'\.+'
                     splitted = re.split(pattern, alt)
                     number = [x for x in splitted if x.find('A') != -1][0]
                     number = ''.join([x for x in number if x.isalnum()])
