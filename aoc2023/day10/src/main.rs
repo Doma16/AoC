@@ -1,5 +1,6 @@
 // THIS IS NOT OPTIMAL CODE, IT IS MY FIRST RUST CODE
 
+use std::fmt;
 use std::{fs::File, io::Read, vec};
 
 fn main() -> std::io::Result<()> {
@@ -33,6 +34,55 @@ fn main() -> std::io::Result<()> {
             p.e = false;
         }
     }
+    /*
+    for (idx, p) in map.iter().enumerate() {
+        if idx % line_len == 0 {
+            println!();
+        }
+        print!("{}", p);
+    }
+    */
+
+    let mut count = 0;
+    let mut in_loop = false;
+    let mut up_vertical = false;
+    let mut down_vertical = false;
+    for (idx, p) in map.iter().enumerate() {
+        
+        if idx % line_len == 0 {
+            in_loop = false;
+        }
+        
+        if is_vertical(p) {
+            in_loop = !in_loop;
+        } else if is_up_vertical(p) {
+            if up_vertical {
+                up_vertical = false;
+            } else if down_vertical {
+                in_loop = !in_loop;
+                down_vertical = false;
+            } else {
+                up_vertical = true;
+            }
+        } else if is_down_vertical(p) {
+            if down_vertical {
+                down_vertical = false;
+            } else if up_vertical {
+                up_vertical = false;
+                in_loop = !in_loop;
+            } else {
+                down_vertical = true;
+            }
+        }
+        
+        if in_loop & is_ground(p) {
+            //println!("line: {} {} {}", idx / line_len, idx % line_len, p);
+            count += 1;
+        }
+        
+    }
+
+    println!("p2 result is {}", count);
 
     Ok(())
 }
@@ -46,6 +96,38 @@ struct Pipe {
     e: bool,
 }
 
+impl fmt::Display for Pipe {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut c = '.';
+        match self {
+            Pipe {n: false, s: false, w: false, e: false} => {c = '.'},
+            Pipe {n: false, s: true, w: false, e: true} => {c = 'F'} ,
+            Pipe {n: false, s: true, w: true, e: false} => {c = '7'},
+            Pipe {n: true, s: false, w: true, e: false} => {c = 'J'},
+            Pipe {n: true, s: true, w: false, e: false} => {c = '|'},
+            Pipe {n: false, s: false, w: true, e: true} => {c = '-'},
+            Pipe {n: true, s: false, w: false, e: true} => {c = 'L'},
+            _ => {},
+        }
+        write!(f, "{}", c)
+    }
+}
+
+fn is_ground(p: &Pipe) -> bool {
+    !(p.e | p.w | p.s | p.n)
+}
+
+fn is_vertical(p: &Pipe) -> bool {
+    p.n & p.s
+}
+
+fn is_up_vertical(p: &Pipe) -> bool {
+    p.n & !p.s
+}
+
+fn is_down_vertical(p: &Pipe) -> bool {
+    p.s & !p.n
+}
 
 fn char_to_pipe(c: &char) -> Pipe {
     match c {
@@ -61,7 +143,9 @@ fn char_to_pipe(c: &char) -> Pipe {
     }
 }
 
-fn calc_start(id: usize, v: &mut Vec<Pipe>, n: usize){
+fn calc_start(id: usize, v: &mut Vec<Pipe>, n: usize) {
+
+
 
     let id_up = id - n;
     let id_down = id + n;
